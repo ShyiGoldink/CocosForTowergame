@@ -1,0 +1,54 @@
+# Cocos Creator 缓存、编译产物
+library/
+local/
+temp/
+build/
+build-template/
+publish/
+.import
+*.meta.old
+*.meta.bak
+cocos-params.json
+package-lock.json
+node_modules/
+
+# 编辑器缓存
+.vs/
+.vscode/
+*.suo
+*.user
+*.log
+.DS_Store
+Thumbs.db
+
+# 美术素材缓存、临时文件
+*.psd
+*.psb
+*.ai
+*.sketch
+*.clip
+*.clipbak
+*.tga
+*.tif
+*.tmp
+*.bak
+
+# 平台编译输出
+platforms/
+simulator/
+
+# 安卓/iOS 原生编译缓存
+obj/
+gradle/
+.gradle
+build.gradle.user
+xcuserdata/
+*.xcworkspace
+*.xcodeproj
+*.ipa
+*.apk
+
+# 打包临时文件
+*.zip
+*.rar
+*.7z

@@ -81,7 +81,6 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
                 }
                 else if (blockType == 1)//1代表wall
                 {
-                    if (x == 19 && y == 0) { continue; }
                     if (!this.wallPrefab) continue;
                     const wallNode = cc.instantiate(this.wallPrefab!) as cc.Node;
                     wallNode.parent = this.node;
@@ -180,18 +179,70 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
         const x = cell.getX;
         const y = cell.getY;
 
-        if (this.isWalkable(x + 1, y))
-            result.push(this.grid[y][x + 1]);
+        cc.log("Current:", x, y);
 
-        if (this.isWalkable(x - 1, y))
-            result.push(this.grid[y][x - 1]);
+        const dirs = [
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1]
+        ];
 
-        if (this.isWalkable(x, y + 1))
-            result.push(this.grid[y + 1][x]);
+        for (const dir of dirs) {
 
-        if (this.isWalkable(x, y - 1))
-            result.push(this.grid[y - 1][x]);
+            const nx = x + dir[0];
+            const ny = y + dir[1];
+
+            if (
+                nx < 0 ||
+                nx >= ConfigExtern.MAP_WIDTH ||
+                ny < 0 ||
+                ny >= ConfigExtern.MAP_HEIGHT
+            )
+                continue;
+
+            cc.log(
+                "Check:",
+                nx,
+                ny,
+                this.grid[ny][nx].isEmpty
+            );
+
+            if (this.isWalkable(nx, ny))
+                result.push(this.grid[ny][nx]);
+        }
 
         return result;
+    }
+    public WorldToGrid(world: cc.Vec2): GridCell | null {
+        const offset =
+            (ConfigExtern.WALL_SIZE - ConfigExtern.GRID_SIZE) * 0.5;
+
+        const halfMapWidth =
+            ConfigExtern.MAP_WIDTH * ConfigExtern.GRID_SIZE * 0.5;
+
+        const halfMapHeight =
+            ConfigExtern.MAP_HEIGHT * ConfigExtern.GRID_SIZE * 0.5;
+
+        const x = Math.floor(
+            (world.x + halfMapWidth - offset)
+            / ConfigExtern.GRID_SIZE
+        );
+
+        const y = Math.floor(
+            (world.y + halfMapHeight - offset)
+            / ConfigExtern.GRID_SIZE
+        );
+
+        if (
+            x < 0 ||
+            x >= ConfigExtern.MAP_WIDTH ||
+            y < 0 ||
+            y >= ConfigExtern.MAP_HEIGHT
+        ) {
+            return null;
+        }
+
+        return this.grid[y][x];
     }
 }

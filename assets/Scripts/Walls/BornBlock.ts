@@ -19,6 +19,7 @@ export default class BornBlock extends cc.Component {
     }
     protected start(): void {
         EnemyManager.Instance.registerBornBlock(this.ID, this);
+        this.canGoend();
     }
 
     private canGoend(): void {
@@ -103,8 +104,6 @@ export default class BornBlock extends cc.Component {
     public setCell(cell: GridCell): void {
 
         this._cell = cell;
-
-        this.canGoend();
     }
     // 给Enemy使用
     public getPath(): GridCell[] {
@@ -122,6 +121,7 @@ export default class BornBlock extends cc.Component {
             // Grid局部坐标
             let gridPos =
                 GridManager.Instance.GridToWorld(cell);
+
             // Grid局部
             // -> 世界
             let worldPos =

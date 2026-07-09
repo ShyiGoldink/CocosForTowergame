@@ -1,4 +1,4 @@
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class BasicBlock extends cc.Component {
@@ -6,5 +6,5 @@ export default class BasicBlock extends cc.Component {
     {
         super();
     }
-   
+
 }

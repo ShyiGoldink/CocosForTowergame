@@ -9,6 +9,7 @@ import EventBus from "../EventBus";
 export enum EnemyState {
     Prepare,
     Spawn,
+    WaitingClear,     // 新增：等待当前波怪物全部死亡
     Finish
 }
 
@@ -115,6 +116,11 @@ export default class EnemyManager extends cc.Component {
                 this.spawnEnemy(dt);
 
                 break;
+
+            case EnemyState.WaitingClear:
+
+                // 等待所有敌人死亡
+                break;
         }
     }
 
@@ -168,6 +174,15 @@ export default class EnemyManager extends cc.Component {
         let wave =
             this.enemyData!.waves[this.currentWave];
 
+        // 防止Group越界
+        if (this.currentGroup >= wave.groups.length) {
+
+            this._enemyState =
+                EnemyState.WaitingClear;
+
+            return;
+        }
+
         let group =
             wave.groups[this.currentGroup];
 
@@ -203,6 +218,9 @@ export default class EnemyManager extends cc.Component {
 
             // 所有Group都生成完
             if (this.currentGroup >= wave.groups.length) {
+
+                this._enemyState =
+                    EnemyState.WaitingClear;
 
                 return;
             }
@@ -249,13 +267,11 @@ export default class EnemyManager extends cc.Component {
     private handleEnemyDead(): void {
 
         this.deadEnemy++;
-
         cc.log(
             this.deadEnemy,
             "/",
             this.sumEnemyNum
         );
-
         // 当前Wave所有怪都死了
         if (this.deadEnemy >= this.sumEnemyNum) {
 

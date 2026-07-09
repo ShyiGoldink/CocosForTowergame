@@ -644,6 +644,9 @@
     "initData": {
       "__uuid__": "0e99ca97-fa0b-4d13-85f0-a5191aebfa51"
     },
+    "enemyData": {
+      "__uuid__": "95605eb1-1095-40b2-b1a5-18a6ba8a1a95"
+    },
     "_id": "9aYvaJnxxLn7ZlMYljW5LD"
   },
   {
@@ -657,6 +660,7 @@
     "childPoints": [],
     "ID": 2,
     "initData": null,
+    "enemyData": null,
     "_id": "e533jBLF5IroAjaECZOYrh"
   },
   {
@@ -975,6 +979,7 @@
     ],
     "ID": 3,
     "initData": null,
+    "enemyData": null,
     "_id": "d1iKuFFNlEwYjbvbd+gzuO"
   },
   {
@@ -1289,6 +1294,7 @@
     "childPoints": [],
     "ID": 5,
     "initData": null,
+    "enemyData": null,
     "_id": "afmn6wqPZL4rbzceZrHYLw"
   },
   {
@@ -1603,6 +1609,7 @@
     "childPoints": [],
     "ID": 4,
     "initData": null,
+    "enemyData": null,
     "_id": "8aO8pY9BxFAJPXTivTOjR9"
   },
   {
@@ -1981,7 +1988,7 @@
         "__id__": 67
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [],
     "_prefab": null,
     "_opacity": 255,

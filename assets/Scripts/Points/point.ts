@@ -11,6 +11,8 @@ export default class Point extends cc.Component {
     private isPassed: boolean = false;//是否通关
     @property(cc.JsonAsset)//使用json文件进行数据驱动
     private initData: cc.JsonAsset | null = null;
+    @property(cc.JsonAsset)//怪物的数据
+    private enemyData: cc.JsonAsset | null = null;
 
 
     public get getPointId(): number//获取Id
@@ -20,9 +22,13 @@ export default class Point extends cc.Component {
 
     public OnClicked(): void //加载游戏场景的逻辑
     {
+
         //必须先把关卡数据交给静态类
         if (this.initData)
-            DataTransformer.LoadFromJson(this.initData);
+            DataTransformer.LoadMapFromJson(this.initData);
+        if (this.enemyData)
+            DataTransformer.loadEnemyFromJson(this.enemyData);
+
         //然后才能切换场景
         cc.director.loadScene("GameScene");
 

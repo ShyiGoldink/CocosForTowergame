@@ -22,7 +22,7 @@ export default class BornBlock extends cc.Component {
         this.canGoend();
     }
 
-    private canGoend(): void {
+    public canGoend(): void {
         if (!this._cell) {
             cc.error("BornBlock没有Cell");
             return;
@@ -30,7 +30,7 @@ export default class BornBlock extends cc.Component {
         const path =
             PathFinder.FindPath(this._cell);
         if (path.length > 0) {
-            this.shortestPath = path;
+            this.shortestPath = path.slice();
             this.color = cc.Color.BLUE;
             BornBlock.canGoending =
                 BornBlock.canGoending && true;
@@ -39,11 +39,8 @@ export default class BornBlock extends cc.Component {
             // 找不到路
             // 保留旧路线
             this.color = cc.Color.RED;
-
             BornBlock.canGoending = false;
         }
-
-
         this.DrawLines();
     }
 
@@ -62,7 +59,6 @@ export default class BornBlock extends cc.Component {
     }
     private DrawLines(): void {
         if (!this.graphics) {
-            cc.error("没有Graphics");
             return;
         }
         this.graphics.clear();

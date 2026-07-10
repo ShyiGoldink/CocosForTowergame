@@ -4,30 +4,27 @@ import ConfigExtern from "../ConfigExtern";
 import DataTransformer from "../Points/DataTrasformer";
 import Wall from "../Walls/Wall";
 import BornBlock from "../Walls/BornBlock";
+import DrawTool from "./DrawTool";
+import EventBus from "../EventBus";
 
 @ccclass
 export default class GridManager extends cc.Component //这里是gridmanager，专门用于管理格子的数据结构，同时提供路径等方案
 {
     // 单例
     private static _instance: GridManager = null!;
-
     public static get Instance(): GridManager {
         return this._instance;
     }
-
     private grid: GridCell[][] = [];//二维数组用于储存GridCell
+    private bbs: BornBlock[] = [];//副本，用于寻路
     private endCell: GridCell | null = null;
     private ids: number = 0;
-
     @property(cc.Prefab)
     private wallPrefab: cc.Prefab | null = null;
-
     @property(cc.Prefab)
     private bornPrefab: cc.Prefab | null = null;// 让BornPosition去拿引用来进行路线的判定
-
     @property(cc.Prefab)
     private endPrefab: cc.Prefab | null = null;
-
     private mapData: [number, number][][] =
         Array.from(
             { length: ConfigExtern.MAP_HEIGHT },
@@ -37,9 +34,15 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
                     () => [0, 0] as [number, number]
                 )
         );
+    private result: cc.Vec2[] = [];
+    private preX: number = 0;
+    private preY: number = 0;
+    private walls: Wall[] = [];//小对象池，四个wall，用于占位
 
     onLoad()//
     {
+        const manager = cc.director.getCollisionManager();
+        manager.enabled = true;
         // 单例初始化
         if (GridManager._instance && GridManager._instance !== this) {
             this.node.destroy();
@@ -52,6 +55,12 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
         this.initGrid();
         this.mapData = DataTransformer.GetMapData();
         this.initScene();
+
+        for (let i = 0; i < 4; i++) {
+            this.result.push(cc.v2());
+            let wall: Wall = new Wall();
+            this.walls.push(wall);
+        }
     }
 
     private initGrid() //初始化数据结构
@@ -104,6 +113,7 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
                     bornNode.zIndex = -this.grid[y][x].getX - this.grid[y][x].getY * ConfigExtern.MAP_WIDTH;
                     bornNode.setPosition(this.GridToWorld(this.grid[y][x]));
                     const bornCell = bornNode.getComponentInChildren(BornBlock);
+                    this.bbs.push(bornCell);
 
                     if (bornCell) {
                         bornCell.setCell(this.grid[y][x]);
@@ -178,9 +188,6 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
 
         const x = cell.getX;
         const y = cell.getY;
-
-        cc.log("Current:", x, y);
-
         const dirs = [
             [1, 0],
             [-1, 0],
@@ -200,14 +207,6 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
                 ny >= ConfigExtern.MAP_HEIGHT
             )
                 continue;
-
-            cc.log(
-                "Check:",
-                nx,
-                ny,
-                this.grid[ny][nx].isEmpty
-            );
-
             if (this.isWalkable(nx, ny))
                 result.push(this.grid[ny][nx]);
         }
@@ -244,5 +243,108 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
         }
 
         return this.grid[y][x];
+    }
+
+
+    public posToBlock(mousePosition: cc.Vec3, blocks: cc.Vec2[]): cc.Vec2[]//这里选择传入的是鼠标位置和整个格子的相对路径，返回的是坐标 
+    {//首先根据求余取得当前格子[yMax = 14][xMax = 19]
+        const x = Math.floor(mousePosition.x / 64);
+        const y = Math.floor(mousePosition.y / 64);
+
+        for (let i = 0; i < blocks.length; i++) {
+            this.result[i].x = blocks[i].x + x;
+            this.result[i].y = blocks[i].y + y;
+        }
+        if (x != this.preX || y != this.preY)//如果格子发生了变化，才会search
+        {
+            this.preX = x;
+            this.preY = y;
+            this.search(this.result);
+        }
+        return this.result;
+    }
+    public clearBlocks(blocks: cc.Vec2[]) {
+        for (let i = 0; i < blocks.length; i++) {
+            if (this.inMap(blocks[i].x, blocks[i].y)) {
+                if (this.grid[blocks[i].y][blocks[i].x].getTemporary) {
+                    this.grid[blocks[i].y][blocks[i].x].removeBlock();
+                    this.grid[blocks[i].y][blocks[i].x].setTemporary(false);
+                }
+            }
+        }
+    }
+    public addBlocks(blocks: cc.Vec2[]) {
+        for (let i = 0; i < blocks.length; i++) {
+            if (this.inMap(blocks[i].x, blocks[i].y)) {
+                if (!this.grid[blocks[i].y][blocks[i].x].getTemporary && this.grid[blocks[i].y][blocks[i].x].isEmpty) {
+                    this.grid[blocks[i].y][blocks[i].x].setBlock(this.walls[i]);
+                    this.grid[blocks[i].y][blocks[i].x].setTemporary(true);
+                }
+            }
+        }
+    }
+    public getNotClog(blocks: cc.Vec2[]): boolean {
+        for (let i = 0; i < blocks.length; i++) {
+            const x = blocks[i].x;
+            const y = blocks[i].y;
+
+            if (!this.inMap(x, y)) {
+                return false;
+            }
+
+            if (!this.grid[y][x].isEmpty) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    public search(blocks: cc.Vec2[]) {
+        let notClog = this.getNotClog(blocks);
+        this.addBlocks(blocks);
+        BornBlock.canGoending = true;
+        if (notClog) {
+            for (let it of this.bbs) {
+                it.canGoend();
+            }
+            this.clearBlocks(blocks);
+        } else {
+            this.clearBlocks(blocks);
+            for (let it of this.bbs) {
+                it.canGoend();
+            }
+        }
+        DrawTool.Instance.draw(blocks, notClog);
+    }
+    public cancle() {
+        this.clearBlocks(this.result);
+        DrawTool.Instance.clear();
+    }
+    public ensure() {
+        let notClog = this.getNotClog(this.result);
+        if (!(BornBlock.canGoending && notClog)) { return; }
+        DrawTool.Instance.clear();
+        for (let i = 0; i < this.result.length; i++) {
+            if (this.inMap(this.result[i].x, this.result[i].y)) {
+                if (this.grid[this.result[i].y][this.result[i].x].isEmpty) {
+                    this.grid[this.result[i].y][this.result[i].x].setBlock(new Wall());
+                    this.grid[this.result[i].y][this.result[i].x].setTemporary(false);
+                    const wallNode = cc.instantiate(this.wallPrefab!) as cc.Node;
+                    wallNode.parent = this.node;
+                    wallNode.zIndex = -this.grid[this.result[i].y][this.result[i].x].getX - this.grid[this.result[i].y][this.result[i].x].getY * ConfigExtern.MAP_WIDTH;
+                    wallNode.setPosition(this.GridToWorld(this.grid[this.result[i].y][this.result[i].x]));
+                    const wall = wallNode.getComponent(Wall);
+                    wall?.setCell(this.grid[this.result[i].y][this.result[i].x]);
+                }
+            }
+        }
+        EventBus.Instance.emit("destoryCard");
+
+    }
+    private inMap(x: number, y: number): boolean {
+        return x >= 0 &&
+            x < ConfigExtern.MAP_WIDTH &&
+            y >= 0 &&
+            y < ConfigExtern.MAP_HEIGHT;
     }
 }

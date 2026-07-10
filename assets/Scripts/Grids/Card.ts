@@ -2,6 +2,8 @@ const { ccclass, property } = cc._decorator;
 import EventBus from "../EventBus";
 import DragTool from "./DragTool";
 import Tetromino from "./Tetromino";
+import GridManager from "./GridManager";
+import Slot from "./Slot";
 
 @ccclass
 export default class Card extends cc.Component //card
@@ -13,6 +15,7 @@ export default class Card extends cc.Component //card
     private type: number = 1;
     private tetromino: Tetromino | null = null;
     private cardFace: cc.Sprite | null = null;
+    private slot: Slot | null = null;
 
     //获取卡面内容，对应不同的方块。
     private cardFaces: (cc.SpriteFrame | null)[] = [];
@@ -42,22 +45,29 @@ export default class Card extends cc.Component //card
     protected onEnable(): void//注册拖拽事件
     {
         if (this.dragTool) {
-            EventBus.Instance.on("DragMove", this.handleDragEvent, this);
+            this.dragTool.regisCallBack(
+                this.handleDragEvent.bind(this)
+            );
             EventBus.Instance.on("StopDraging", this.handleStopDragEvent, this);
         }
+        EventBus.Instance.on("Draging", this.handleStartDrag, this);
 
     }
     protected onDisable(): void //注册后记得取消注册
     {
         if (this.dragTool) {
-            EventBus.Instance.off("DragMove", this.handleDragEvent, this);
             EventBus.Instance.off("StopDraging", this.handleStopDragEvent, this);
         }
+        EventBus.Instance.off("Draging", this.handleStartDrag, this);
     }
     protected update(dt: number): void {
         ;
     }
-
+    private handleStartDrag(node: cc.Node) {
+        if (this.dragTool && node == this.dragTool.node) {
+            EventBus.Instance.emit("changeCard", this);
+        }
+    }
     private handleDragEvent(node: cc.Node, position: cc.Vec3) {
         if (!this.isDraging)//如果是第一次运行，在拖拽之前先保存拖拽之前的位置
         {
@@ -70,6 +80,7 @@ export default class Card extends cc.Component //card
         else if (this.dragTool) {
             this.node.opacity = 128;
         }
+        if (this.tetromino) GridManager.Instance.posToBlock(position, this.tetromino.GetCurrentType);
     }
     private handleStopDragEvent(node: cc.Node) {
         this.node.opacity = 255;
@@ -88,6 +99,17 @@ export default class Card extends cc.Component //card
 
     public setOriginPosition(position: cc.Vec3) {
         this.originPosition = position;
+    }
+
+    public rotate() {
+        this.tetromino?.ChangeType();
+    }
+
+    public setSlot(_slot: Slot) {
+        this.slot = _slot;
+    }
+    protected onDestroy(): void {
+        if (this.slot) this.slot.setStatu(false);
     }
 }
 

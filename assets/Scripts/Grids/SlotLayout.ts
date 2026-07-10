@@ -47,6 +47,7 @@ export default class SlotLayout extends cc.Component //SlotLayout的主要功能
                         type = Math.floor(Math.random() * 5) + 1;
                     }
                     theCard.init(type);
+                    theCard.setSlot(slot);
                     theCard.setOriginPosition(cc.v3(cardPos.x, cardPos.y, 0));
                 }
                 cc.log("init ended");

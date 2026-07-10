@@ -6,17 +6,38 @@ import Tetromino from "./Tetromino";
 @ccclass
 export default class Card extends cc.Component //card
 {
-    private dragTool: DragTool | null = null;
+    private dragTool: DragTool | null = null;//拖拽工具
     private originPosition: cc.Vec3 = new cc.Vec3();//记录拖拽前的位置
     private isDraging: boolean = false;
     @property
-    private type: Number = 0;
+    private type: number = 1;
     private tetromino: Tetromino | null = null;
+    private cardFace: cc.Sprite | null = null;
+
+    //获取卡面内容，对应不同的方块。
+    private cardFaces: (cc.SpriteFrame | null)[] = [];
+    @property(cc.SpriteFrame)
+    private cardL: cc.SpriteFrame | null = null;
+    @property(cc.SpriteFrame)
+    private cardT: cc.SpriteFrame | null = null;
+    @property(cc.SpriteFrame)
+    private cardI: cc.SpriteFrame | null = null;
+    @property(cc.SpriteFrame)
+    private cardO: cc.SpriteFrame | null = null;
+    @property(cc.SpriteFrame)
+    private cardZ: cc.SpriteFrame | null = null;
+
 
     protected onLoad(): void //获取组件
     {
         this.dragTool = this.getComponent(DragTool);
-        if (this.tetromino) this.tetromino = new Tetromino(this.type);
+        this.cardFace = this.getComponent(cc.Sprite);
+        this.cardFaces[0] = this.cardL!;
+        this.cardFaces[1] = this.cardL!;
+        this.cardFaces[2] = this.cardT!;
+        this.cardFaces[3] = this.cardI!;
+        this.cardFaces[4] = this.cardO!;
+        this.cardFaces[5] = this.cardZ!;
     }
     protected onEnable(): void//注册拖拽事件
     {
@@ -40,7 +61,6 @@ export default class Card extends cc.Component //card
     private handleDragEvent(node: cc.Node, position: cc.Vec3) {
         if (!this.isDraging)//如果是第一次运行，在拖拽之前先保存拖拽之前的位置
         {
-            this.originPosition = this.node.position.clone();
             this.node.opacity = 192;
         }
         if (this.dragTool && node == this.dragTool.node) {
@@ -58,6 +78,16 @@ export default class Card extends cc.Component //card
             //这里可以使用动画进行协调
             this.node.position = this.originPosition;
         }
+    }
+    public init(num: number): void {
+        this.type = num;
+        this.tetromino = new Tetromino(this.type);
+        if (this.cardFace) this.cardFace.spriteFrame = this.cardFaces[num]!;
+
+    }
+
+    public setOriginPosition(position: cc.Vec3) {
+        this.originPosition = position;
     }
 }
 

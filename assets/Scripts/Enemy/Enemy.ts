@@ -69,7 +69,7 @@ export default class Enemy extends cc.Component {
 
     private reachEnd(): void {
         EventBus.Instance.emit("EnemyDisable");
-        cc.log("event submit");
+        
         if (this.recycleCallback) {
             this.recycleCallback(this);
         }

@@ -4,8 +4,8 @@ const { ccclass, property } = cc._decorator;
 export default class Tetromino {
 
 
-    private tetrimuniType: number = 0;//1 is L,2 is T,3 is I,4 is O,5 is Z
-    constructor(num: number) {
+    private tetrimuniType: Number = 0;//1 is L,2 is T,3 is I,4 is O,5 is Z
+    constructor(num: Number) {
         this.tetrimuniType = num;
         this.init();
     }

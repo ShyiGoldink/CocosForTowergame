@@ -14,8 +14,12 @@ export default class TowerData extends cc.Component {
         tooltip: "攻击范围"
     })
     public range: number = 128;
+    @property({ tooltip: "花费" })
+    public cost: number = 100;
 
     /** 子弹预制体 */
     @property(cc.Prefab)
     public bulletPrefab: cc.Prefab | null = null;
+
+    public towerPosition: cc.Vec2 = cc.v2(1, 0);
 }

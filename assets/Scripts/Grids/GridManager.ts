@@ -318,6 +318,12 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
     }
     public cancle() {
         this.clearBlocks(this.result);
+        this.result = [];
+        for (let i = 0; i < 4; i++) {
+            this.result.push(cc.v2());
+            let wall: Wall = new Wall();
+            this.walls.push(wall);
+        }
         DrawTool.Instance.clear();
     }
     public ensure() {

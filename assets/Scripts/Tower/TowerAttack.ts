@@ -122,6 +122,7 @@ export default class TowerAttack extends cc.Component {
                     this.bulletPool.put(node);
                 }
             );
+            bullet.damage += this.data.attck;
         }
     }
 

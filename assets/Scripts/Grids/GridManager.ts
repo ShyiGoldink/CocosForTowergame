@@ -6,17 +6,18 @@ import Wall from "../Walls/Wall";
 import BornBlock from "../Walls/BornBlock";
 import DrawTool from "./DrawTool";
 import EventBus from "../EventBus";
+import { GameStatus } from "../Game/StatusManager";
 
 @ccclass
 export default class GridManager extends cc.Component //这里是gridmanager，专门用于管理格子的数据结构，同时提供路径等方案
 {
     // 单例
-    private static _instance: GridManager = null!;
+    private static _instance: GridManager | null = null;
     public static get Instance(): GridManager {
-        return this._instance;
+        return this._instance!;
     }
     private grid: GridCell[][] = [];//二维数组用于储存GridCell
-    private bbs: BornBlock[] = [];//副本，用于寻路
+    private bbs: BornBlock[] = [];
     private endCell: GridCell | null = null;
     private ids: number = 0;
     @property(cc.Prefab)
@@ -55,6 +56,8 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
         this.initGrid();
         this.mapData = DataTransformer.GetMapData();
         this.initScene();
+        cc.log(DataTransformer.GetMapData().length);
+        cc.log(DataTransformer.GetMapData()[0].length);
 
         for (let i = 0; i < 4; i++) {
             this.result.push(cc.v2());
@@ -62,7 +65,20 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
             this.walls.push(wall);
         }
     }
-
+    protected onEnable(): void {
+        EventBus.Instance.on("statusChanged", this.onBattle, this);
+    }
+    protected onDisable(): void {
+        EventBus.Instance.off("statusChanged", this.onBattle, this);
+    }
+    protected onDestroy(): void {
+        if (GridManager._instance === this) {
+            GridManager._instance = null;
+        }
+    }
+    private onBattle(gameStatu: GameStatus) {
+        if (gameStatu == GameStatus.Battle) { this.ensure(); }
+    }
     private initGrid() //初始化数据结构
     {
         for (let y = 0; y < ConfigExtern.MAP_HEIGHT; y++) {
@@ -263,6 +279,16 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
         }
         return this.result;
     }
+    public potatoDraw(mousePosition: cc.Vec3, blocks: cc.Vec2[]) {
+        const x = Math.floor(mousePosition.x / 64);
+        const y = Math.floor(mousePosition.y / 64);
+        for (let i = 0; i < blocks.length; i++) {
+            this.result[i].x = blocks[i].x + x;
+            this.result[i].y = blocks[i].y + y;
+        }
+        this.search(this.result);
+
+    }
     public clearBlocks(blocks: cc.Vec2[]) {
         for (let i = 0; i < blocks.length; i++) {
             if (this.inMap(blocks[i].x, blocks[i].y)) {
@@ -323,6 +349,9 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
             this.result.push(cc.v2());
             let wall: Wall = new Wall();
             this.walls.push(wall);
+        }
+        for (let it of this.bbs) {
+            it.canGoend();
         }
         DrawTool.Instance.clear();
     }

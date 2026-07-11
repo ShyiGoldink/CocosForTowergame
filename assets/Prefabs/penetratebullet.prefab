@@ -119,7 +119,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "damage": 10,
+    "damage": 15,
     "speed": 100,
     "lifeTime": 10,
     "direction": {
@@ -145,8 +145,8 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 16,
-      "height": 10
+      "width": 52,
+      "height": 52
     },
     "_id": ""
   },

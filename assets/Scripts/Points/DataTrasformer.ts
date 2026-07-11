@@ -17,6 +17,8 @@ export default class DataTransformer //静态类，用于场景切换时的数�
         );
 
     private static enemyData: LevelWaveData | null = null;//EnemyData类型，储存在“EnemyDataModule中”
+    private static resourceData: number = 0;
+    private static life: number = 0;
     public static LoadMapFromJson(json: cc.JsonAsset): void //获取关卡的json
     {
         if (!json) {
@@ -95,6 +97,18 @@ export default class DataTransformer //静态类，用于场景切换时的数�
         this.enemyData = levelData;
     }
 
+    public static loadResourceFromJson(json: cc.JsonAsset)//获取初始资源数据
+    {
+        if (!json) {
+            return;
+        }
+        const data = json.json;
+        if (!data.initResource) {
+            return;
+        }
+        this.life = data.life
+        this.resourceData = data.initResource;
+    }
 
     public static GetMapData(): [number, number][][]//向gridManager提供数据便于加载场景
     {
@@ -103,5 +117,12 @@ export default class DataTransformer //静态类，用于场景切换时的数�
     public static GetEnemyData(): LevelWaveData | null//向EnemyManager提供数据用于加载怪物
     {
         return this.enemyData;
+    }
+    public static GetInitResource(): number//获取初始资金
+    {
+        return this.resourceData;
+    }
+    public static GetLife(): number {
+        return this.life;
     }
 }

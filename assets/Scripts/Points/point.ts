@@ -1,6 +1,6 @@
 const { ccclass, property } = cc._decorator;
 import DataTransformer from "./DataTrasformer";
-
+import StatusManager, { GameStatus } from "../Game/StatusManager";
 @ccclass
 export default class Point extends cc.Component {
 
@@ -13,6 +13,8 @@ export default class Point extends cc.Component {
     private initData: cc.JsonAsset | null = null;
     @property(cc.JsonAsset)//怪物的数据
     private enemyData: cc.JsonAsset | null = null;
+    @property(cc.JsonAsset)//初始资源
+    private resourceData: cc.JsonAsset | null = null;
 
 
     public get getPointId(): number//获取Id
@@ -28,7 +30,9 @@ export default class Point extends cc.Component {
             DataTransformer.LoadMapFromJson(this.initData);
         if (this.enemyData)
             DataTransformer.loadEnemyFromJson(this.enemyData);
-
+        if (this.resourceData) DataTransformer.loadResourceFromJson(this.resourceData);
+        //然后切换游戏状态
+        StatusManager.setStatus(GameStatus.Prepare);
         //然后才能切换场景
         cc.director.loadScene("GameScene");
 

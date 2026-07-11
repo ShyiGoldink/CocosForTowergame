@@ -5,6 +5,7 @@ import EnemyPool from "./EnemyPool";
 import { LevelWaveData } from "./EnemyDataModule";
 import DataTransformer from "../Points/DataTrasformer";
 import EventBus from "../EventBus";
+import StatusManager, { GameStatus } from "../Game/StatusManager";
 
 export enum EnemyState {
     Prepare,
@@ -160,6 +161,7 @@ export default class EnemyManager extends cc.Component {
 
         this._enemyState =
             EnemyState.Spawn;
+        StatusManager.setStatus(GameStatus.Battle);
     }
 
     //-----------------------------------------
@@ -244,12 +246,11 @@ export default class EnemyManager extends cc.Component {
         this.currentWave++;
 
         if (this.currentWave >= this.sumWave) {
-
             this._enemyState =
                 EnemyState.Finish;
-
-            cc.log("全部波数结束");
-
+            StatusManager.setStatus(GameStatus.Finish);
+            EventBus.Instance.emit("win");
+            //这里写获胜事件
             return;
         }
 
@@ -257,7 +258,7 @@ export default class EnemyManager extends cc.Component {
             this.enemyData!
                 .waves[this.currentWave]
                 .prepareTime;
-
+        StatusManager.setStatus(GameStatus.Prepare);
         this._enemyState =
             EnemyState.Prepare;
     }
@@ -277,6 +278,12 @@ export default class EnemyManager extends cc.Component {
 
             this.nextWave();
 
+        }
+    }
+
+    public skip() {
+        if (this._enemyState == EnemyState.Prepare && this.timer > 3) {
+            this.timer = 3;
         }
     }
 

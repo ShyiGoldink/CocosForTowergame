@@ -16,6 +16,7 @@ export default class Card extends cc.Component //card
     private tetromino: Tetromino | null = null;
     private cardFace: cc.Sprite | null = null;
     private slot: Slot | null = null;
+    private lastPosition: cc.Vec3 | null = null;
 
     //获取卡面内容，对应不同的方块。
     private cardFaces: (cc.SpriteFrame | null)[] = [];
@@ -80,7 +81,10 @@ export default class Card extends cc.Component //card
         else if (this.dragTool) {
             this.node.opacity = 128;
         }
-        if (this.tetromino) GridManager.Instance.posToBlock(position, this.tetromino.GetCurrentType);
+        if (this.tetromino) {
+            GridManager.Instance.posToBlock(position, this.tetromino.GetCurrentType);
+            this.lastPosition = position;
+        }
     }
     private handleStopDragEvent(node: cc.Node) {
         this.node.opacity = 255;
@@ -110,6 +114,11 @@ export default class Card extends cc.Component //card
     }
     protected onDestroy(): void {
         if (this.slot) this.slot.setStatu(false);
+    }
+    public rotateRedraw() {
+        if (this.tetromino && this.lastPosition) {
+            GridManager.Instance.potatoDraw(this.lastPosition, this.tetromino.GetCurrentType);
+        }
     }
 }
 

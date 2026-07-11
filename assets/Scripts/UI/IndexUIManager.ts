@@ -14,17 +14,12 @@ export default class NewClass extends cc.Component//管理目录菜单
 
     @property(cc.Node)
     private pageIndex: cc.Node | null = null;
-
-
     @property(cc.Node)
     private pageLevels: cc.Node | null = null;
 
     protected start(): void // 显示indexPage，先不显示LevelsPage
     {
-        if (this.pageIndex)
-            this.pageIndex.active = true;
-        if (this.pageLevels)
-            this.pageLevels.active = false;
+        this.backToIndex();
     }
 
     public onGameStart(): void {
@@ -38,4 +33,10 @@ export default class NewClass extends cc.Component//管理目录菜单
         cc.game.end();
     }
 
+    public backToIndex(): void {
+        if (this.pageIndex)
+            this.pageIndex.active = true;
+        if (this.pageLevels)
+            this.pageLevels.active = false;
+    }
 }

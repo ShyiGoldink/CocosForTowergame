@@ -22,4 +22,5 @@ export default class TowerData extends cc.Component {
     public bulletPrefab: cc.Prefab | null = null;
 
     public towerPosition: cc.Vec2 = cc.v2(1, 0);
+    public attck: number = 0;
 }

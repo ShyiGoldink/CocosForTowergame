@@ -1,28 +1,104 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
+import EventBus from "../EventBus";
+import DataTransformer from "../Points/DataTrasformer";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class GameManager extends cc.Component {
 
+    private static instance: GameManager | null = null;
     @property(cc.Label)
-    label: cc.Label = null;
+    private heart: cc.Label | null = null;
+    private lifes: number | number = 0;
+    private isPaused: boolean = false;
+    @property(cc.Node)
+    private panel: cc.Node | null = null;
+    @property(cc.Node)
+    private failPanel: cc.Node | null = null;
+    @property(cc.Node)
+    private winPanel: cc.Node | null = null;
 
-    @property
-    text: string = 'hello';
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {}
-
-    start () {
-
+    public static getInstance(): GameManager | null {
+        if (GameManager.instance == null) {
+            console.error("GameManager 尚未初始化！");
+        }
+        return GameManager.instance;
     }
 
-    // update (dt) {}
+    protected onLoad(): void {
+        if (GameManager.instance != null) {
+            this.node.destroy();
+            return;
+        }
+        GameManager.instance = this;
+        this.lifes = DataTransformer.GetLife();
+        if (this.panel) this.hidePanel();
+        this.hideFailPanel();
+        this.hideWinPanel();
+        this.updateLife();
+    }
+    protected onEnable(): void {
+        EventBus.Instance.on("EnemyReached", this.reduceLife, this);
+        EventBus.Instance.on("win", this.showWinPanel, this);
+    }
+    protected onDisable(): void {
+        EventBus.Instance.off("EnemyReached", this.reduceLife, this);
+        EventBus.Instance.off("win", this.showWinPanel, this);
+    }
+    private reduceLife() {
+        this.lifes--;
+        this.updateLife();
+    }
+    private updateLife() {
+        if (this.lifes <= 0) {
+            this.lifes = 0;
+            //然后处理失败逻辑
+            this.togglePause();
+            this.showFailPanel();
+        }
+        this.heart!.string = this.lifes.toString();
+    }
+
+    private showFailPanel() {
+        if (this.failPanel) this.failPanel.active = true;
+    }
+    private showWinPanel() {
+        if (this.winPanel) this.winPanel.active = true;
+
+    }
+    private hideFailPanel() {
+        if (this.failPanel) this.failPanel.active = false;
+    }
+    private hideWinPanel() {
+        if (this.winPanel) this.winPanel.active = false;
+
+    }
+    protected onDestroy(): void {
+        if (GameManager.instance === this) {
+            GameManager.instance = null;
+        }
+    }
+
+    public togglePause(): void {
+        this.isPaused = !this.isPaused;
+
+        if (this.isPaused) {
+            cc.director.pause();
+        } else {
+            cc.director.resume();
+        }
+    }
+
+    public showPanel() {
+        if (this.panel) this.panel.active = true;
+    }
+    public hidePanel() {
+        if (this.panel) this.panel.active = false;
+    }
+    public exitGame(isPass: boolean) {
+        if (isPass) {
+            ;//通关的效果
+        }
+        cc.director.loadScene("LevelScene");
+    }
 }

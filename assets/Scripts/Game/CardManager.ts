@@ -3,6 +3,7 @@ import SlotLayout from "../Grids/SlotLayout";
 import Card from "../Grids/Card";
 import EventBus from "../EventBus";
 import DrawTool from "../Grids/DrawTool";
+import GoldManager from "../Game/GoldManager";
 
 @ccclass
 export default class CardManager extends cc.Component {
@@ -29,6 +30,7 @@ export default class CardManager extends cc.Component {
     }
     public buyCard(type: number): void//购买卡牌
     {
+        if (!GoldManager.Instance.reduceGold(10)) { return; }
         if (this.slotLayout?.hasEmptySlot()) {
             if (this.card)
                 this.slotLayout.addCard(this.card, type);
@@ -37,7 +39,7 @@ export default class CardManager extends cc.Component {
     public rotateCard() {
         if (this.currentCard)
             this.currentCard.rotate();
-        DrawTool.Instance.clear();
+        this.currentCard?.rotateRedraw();
     }
     public handleCardChange(card: Card) {
         this.currentCard = card;
@@ -46,7 +48,6 @@ export default class CardManager extends cc.Component {
         if (this.currentCard) {
             this.currentCard.node.active = false;
             this.currentCard.destroy();
-
         }
     }
 

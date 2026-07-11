@@ -2,6 +2,8 @@ const { ccclass, property } = cc._decorator;
 import EventBus from "../EventBus";
 import EnemyStatu from "./EnemyStatu";
 import HPBar from "./HPBar";
+import GoldManager from "../Game/GoldManager";
+import DamageTextPool from "./DamageTextPool";
 @ccclass
 export default class Enemy extends cc.Component {
     @property
@@ -74,6 +76,7 @@ export default class Enemy extends cc.Component {
 
     private reachEnd(): void {
         EventBus.Instance.emit("EnemyDisable");
+        EventBus.Instance.emit("EnemyReached");
 
         if (this.recycleCallback) {
             this.recycleCallback(this);
@@ -85,6 +88,7 @@ export default class Enemy extends cc.Component {
                 return;
 
             this.enemyStatu.hp -= damage;
+            DamageTextPool.Instance.showDamage(damage, this.node.position);
 
             if (this.enemyStatu.hp < 0) {
                 this.enemyStatu.hp = 0;
@@ -106,6 +110,7 @@ export default class Enemy extends cc.Component {
      */
     private dead(): void {
         EventBus.Instance.emit("EnemyDisable");
+        GoldManager.Instance.addGold(this.value);
         if (this.enemyStatu) {
             if (this.enemyStatu.isDead)
                 return;

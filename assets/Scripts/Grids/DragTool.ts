@@ -1,5 +1,6 @@
 const { ccclass, property } = cc._decorator;
 import EventBus from "../EventBus";
+import StatusManager, { GameStatus } from "../Game/StatusManager";
 
 @ccclass
 export default class DragTool extends cc.Component {
@@ -44,7 +45,6 @@ export default class DragTool extends cc.Component {
         this.isDragging = false;
     }
     protected update(dt: number): void {
-
         if (this.isPressing && !this.isDragging) {
             this.pressTimer += dt;
             if (this.pressTimer >= 0.2) {
@@ -54,7 +54,7 @@ export default class DragTool extends cc.Component {
     }
 
     private onTouchMove(event: cc.Event.EventTouch): void {
-
+        if (StatusManager.getStatus() == GameStatus.Battle) { return; }
         if (!this.isPressing)
             return;
         this.updateDrag(event);

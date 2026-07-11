@@ -1,4 +1,6 @@
 const { ccclass, property } = cc._decorator;
+import EventBus from "../EventBus";
+import { GameStatus } from "../Game/StatusManager";
 
 @ccclass
 export default class DrawTool extends cc.Component {
@@ -31,11 +33,15 @@ export default class DrawTool extends cc.Component {
         }
     }
 
-    /**
-     * 绘制预览
-     * @param blocks 四个格子的坐标
-     * @param canBuild true 蓝色 false 红色
-     */
+    protected onEnable(): void {
+        EventBus.Instance.on("statusChanged", this.onBattle, this);
+    }
+    protected onDisable(): void {
+        EventBus.Instance.off("statusChanged", this.onBattle, this);
+    }
+    private onBattle(gameStatu: GameStatus) {
+        if (gameStatu == GameStatus.Battle) { this.clear(); }
+    }
     public draw(blocks: cc.Vec2[], canBuild: boolean): void {
 
         this.clear();

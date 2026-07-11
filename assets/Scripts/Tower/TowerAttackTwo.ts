@@ -75,6 +75,7 @@ export default class TowerAttackTwo extends cc.Component {
             );
 
         }
+        bullet.damage += this.data.attck;
 
     }
 

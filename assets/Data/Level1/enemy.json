@@ -6,7 +6,7 @@
         {
             "id": 1,
 
-            "prepareTime": 5,
+            "prepareTime": 45,
 
             "groups":
             [
@@ -23,7 +23,7 @@
         {
             "id": 2,
 
-            "prepareTime": 5,
+            "prepareTime": 55,
 
             "groups":
             [
@@ -40,7 +40,7 @@
         {
             "id": 3,
 
-            "prepareTime": 5,
+            "prepareTime": 65,
 
             "groups":
             [

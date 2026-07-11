@@ -6,6 +6,7 @@ import Enemy from "../Enemy/Enemy";
 export default class Bullet extends cc.Component {
 
     @property
+    public currentDamage: number = 10;
     public damage: number = 10;
 
     @property
@@ -27,7 +28,7 @@ export default class Bullet extends cc.Component {
         dir: cc.Vec2,
         recycle: (node: cc.Node) => void
     ) {
-
+        this.damage = this.currentDamage;
         this.direction = dir;
 
         this.timer = this.lifeTime;
@@ -65,7 +66,6 @@ export default class Bullet extends cc.Component {
     }
 
     protected recycle() {
-
         if (this.recycleCallback) {
 
             this.recycleCallback(this.node);

@@ -18,6 +18,8 @@ export default class TowerBuyer extends cc.Component//购买Tower专用脚本
     private directionPage: cc.Node | null = null;
     @property(cc.Node)
     private world: cc.Node | null = null;
+    @property(cc.Node)
+    private rangePanel: cc.Node | null = null;
 
     //三个预制体，用于buildTower
     @property(cc.Prefab)
@@ -38,7 +40,7 @@ export default class TowerBuyer extends cc.Component//购买Tower专用脚本
     }
     protected onDisable(): void {
         EventBus.Instance.off("WallClicked", this.showPage, this);
-        EventBus.Instance.on("statusChanged", this.onBattle, this);
+        EventBus.Instance.off("statusChanged", this.onBattle, this);
     }
     private onBattle(status: GameStatus) {
         if (status == GameStatus.Battle) {
@@ -53,6 +55,7 @@ export default class TowerBuyer extends cc.Component//购买Tower专用脚本
         if (wall.towerData != null) {
             if (this.upPage) {
                 this.upPage.active = true;
+                this.updateRangePanel();
             }
         } else {
             if (this.buildPage) this.buildPage.active = true;
@@ -136,6 +139,9 @@ export default class TowerBuyer extends cc.Component//购买Tower专用脚本
             this.upPage.active = false;
             this.directionPage.active = false;
         }
+        if (this.rangePanel) {
+            this.rangePanel.active = false;
+        }
     }
 
     public upSpeed() {
@@ -148,6 +154,7 @@ export default class TowerBuyer extends cc.Component//购买Tower专用脚本
         if (!GoldManager.Instance.reduceGold(500)) return;
         if (this.currentWall.towerData) {
             this.currentWall.towerData.range += 1;
+            this.updateRangePanel();
         }
     }
     public upAttack() {
@@ -155,5 +162,23 @@ export default class TowerBuyer extends cc.Component//购买Tower专用脚本
         if (this.currentWall.towerData) {
             this.currentWall.towerData.attck += 0.5;
         }
+    }
+    private updateRangePanel(): void {
+
+        if (!this.rangePanel) {
+            return;
+        }
+
+        if (!this.currentWall.towerData) {
+            this.rangePanel.active = false;
+            return;
+        }
+
+        this.rangePanel.active = true;
+
+        const diameter = this.currentWall.towerData.range * 2;
+
+        this.rangePanel.width = diameter;
+        this.rangePanel.height = diameter;
     }
 }

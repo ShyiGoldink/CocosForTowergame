@@ -7,6 +7,7 @@ export default class StraightBullet extends cc.Component {
 
     /** 伤害 */
     @property
+    private currentDamage: number = 10;
     public damage: number = 10;
 
     /** 飞行速度 */
@@ -37,7 +38,7 @@ export default class StraightBullet extends cc.Component {
 
         this.direction = dir.clone();
         this.direction.normalizeSelf();
-
+        this.damage = this.currentDamage;
         this.timer = this.lifeTime;
 
         this.recycleCallback = recycle;

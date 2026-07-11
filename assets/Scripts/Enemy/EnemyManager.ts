@@ -17,10 +17,10 @@ export enum EnemyState {
 @ccclass
 export default class EnemyManager extends cc.Component {
 
-    private static _instance: EnemyManager = null!;
+    private static _instance: EnemyManager | null = null!;
 
     public static get Instance(): EnemyManager {
-        return this._instance;
+        return this._instance!;
     }
 
     // 数据
@@ -240,7 +240,11 @@ export default class EnemyManager extends cc.Component {
     }
 
     //-----------------------------------------
-
+    protected onDestroy(): void {
+        if (EnemyManager._instance === this) {
+            EnemyManager._instance = null;
+        }
+    }
     private nextWave(): void {
 
         this.currentWave++;

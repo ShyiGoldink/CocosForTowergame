@@ -8,10 +8,10 @@ export default class DrawTool extends cc.Component {
     @property(cc.Prefab)
     private drawPrefab: cc.Prefab = null!;
 
-    private static _instance: DrawTool = null!;
+    private static _instance: DrawTool | null = null!;
 
     public static get Instance(): DrawTool {
-        return this._instance;
+        return this._instance!;
     }
 
     private drawNodes: cc.Node[] = [];
@@ -85,6 +85,11 @@ export default class DrawTool extends cc.Component {
                 blocks[i].y * 64 + 48
             );
             node.color = color;
+        }
+    }
+    protected onDestroy(): void {
+        if (DrawTool._instance === this) {
+            DrawTool._instance = null;
         }
     }
 

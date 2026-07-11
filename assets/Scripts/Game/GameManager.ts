@@ -53,7 +53,7 @@ export default class GameManager extends cc.Component {
         if (this.lifes <= 0) {
             this.lifes = 0;
             //然后处理失败逻辑
-            this.togglePause();
+            //this.togglePause();
             this.showFailPanel();
         }
         this.heart!.string = this.lifes.toString();

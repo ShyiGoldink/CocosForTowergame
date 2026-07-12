@@ -113,6 +113,7 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
                     wallNode.setPosition(this.GridToWorld(this.grid[y][x]));
                     const wall = wallNode.getComponent(Wall);
                     wall?.setCell(this.grid[y][x]);
+                    wall.isTem = false;
                 }
                 else if (blockType == 2)//2代表终点
                 {
@@ -370,13 +371,14 @@ export default class GridManager extends cc.Component //这里是gridmanager，�
                     wallNode.setPosition(this.GridToWorld(this.grid[this.result[i].y][this.result[i].x]));
                     const wall = wallNode.getComponent(Wall);
                     wall?.setCell(this.grid[this.result[i].y][this.result[i].x]);
+                    wall.isTem = false;
                 }
             }
         }
         EventBus.Instance.emit("destoryCard");
 
     }
-    private inMap(x: number, y: number): boolean {
+    public inMap(x: number, y: number): boolean {
         return x >= 0 &&
             x < ConfigExtern.MAP_WIDTH &&
             y >= 0 &&

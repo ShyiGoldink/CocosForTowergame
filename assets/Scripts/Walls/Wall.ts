@@ -10,14 +10,20 @@ export default class Wall extends BasicBlock//构造wall的预制体
 {
     private _gridCell: GridCell | null = null;//获取Cell的数据，以便于告知CellManager修改其数据
     public towerData: TowerData | null = null;
+    public isTem: boolean = true;//确定是不是临时
     public setCell(gridCell: GridCell)//提供一个传入引用的方法
     {
         this._gridCell = gridCell;
         gridCell.setBlock(this);
     }
     public clicked() {
-        cc.log("Wall Click");
+        if (this.isTem) {
+            return;
+        }
         if (StatusManager.getStatus() == GameStatus.Prepare)//必须限制状态，只有在prepare状态下才能调开面板    
             EventBus.Instance.emit("WallClicked", this);
+    }
+    public clearTower() {
+        this.towerData = null;
     }
 }

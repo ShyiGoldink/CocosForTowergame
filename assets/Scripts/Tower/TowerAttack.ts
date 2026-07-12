@@ -91,39 +91,46 @@ export default class TowerAttack extends cc.Component {
 
     private attack(enemy: Enemy) {
 
-        if (this.data && !this.data.bulletPrefab) {
+        if (!this.data || !this.data.bulletPrefab) {
             return;
         }
 
-        let bulletNode: cc.Node;
+        const stage = this.data.getStage;
 
-        if (this.data) {
-            if (this.bulletPool.size() > 0) {
-                bulletNode = this.bulletPool.get();
-            } else {
-                bulletNode = cc.instantiate(this.data.bulletPrefab!);
-            }
+        for (let i = 0; i < stage; i++) {
 
-            bulletNode.parent = this.node.parent;
-            bulletNode.position = this.node.position;
+            this.scheduleOnce(() => {
 
-            let dir = cc.v2(
-                enemy.node.x - this.node.x,
-                enemy.node.y - this.node.y
-            );
-
-            dir.normalizeSelf();
-
-            let bullet = bulletNode.getComponent(Bullet);
-
-            bullet.init(
-                dir,
-                (node: cc.Node) => {
-                    this.bulletPool.put(node);
+                // 防止敌人已经死亡
+                if (!enemy.node || !enemy.node.activeInHierarchy) {
+                    return;
                 }
-            );
-            bullet.damage += this.data.attck;
+
+                let bulletNode: cc.Node;
+
+                if (this.bulletPool.size() > 0) {
+                    bulletNode = this.bulletPool.get();
+                } else {
+                    bulletNode = cc.instantiate(this.data!.bulletPrefab!);
+                }
+
+                bulletNode.parent = this.node.parent;
+                bulletNode.position = this.node.position;
+
+                const dir = cc.v2(
+                    enemy.node.x - this.node.x,
+                    enemy.node.y - this.node.y
+                ).normalizeSelf();
+
+                const bullet = bulletNode.getComponent(Bullet);
+
+                bullet.init(dir, (node: cc.Node) => {
+                    this.bulletPool.put(node);
+                });
+
+                bullet.damage += this.data!.attck;
+
+            }, i * 0.05);
         }
     }
-
 }

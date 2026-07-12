@@ -140,7 +140,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "damage": 10,
+    "currentDamage": 30,
     "speed": 600,
     "lifeTime": 3,
     "_id": ""

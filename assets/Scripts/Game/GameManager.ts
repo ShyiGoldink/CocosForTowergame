@@ -1,5 +1,6 @@
 import EventBus from "../EventBus";
 import DataTransformer from "../Points/DataTrasformer";
+import SaveLoad from "../Points/SaveLoad";
 
 const { ccclass, property } = cc._decorator;
 
@@ -97,7 +98,7 @@ export default class GameManager extends cc.Component {
     }
     public exitGame(isPass: boolean) {
         if (isPass) {
-            ;//通关的效果
+            SaveLoad.passIt();//通关的效果
         }
         cc.director.loadScene("LevelScene");
     }

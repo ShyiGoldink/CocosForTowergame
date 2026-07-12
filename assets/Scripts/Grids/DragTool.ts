@@ -101,7 +101,7 @@ export default class DragTool extends cc.Component {
 
     private cancelDrag(): void {
 
-        cc.log("取消拖拽");
+        EventBus.Instance.emit("StopDraging", this.node);;
 
     }
 

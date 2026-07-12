@@ -1,0 +1,68 @@
+{
+    "id": 1,
+
+    "waves":
+    [
+        {
+            "id": 1,
+
+            "prepareTime": 45,
+
+            "groups":
+            [
+                {
+                    "enemyType": 1,
+                    "count": 10,
+                    "spawnInterval": 0.5,
+                    "spawnPoint": 0
+                }
+            ]
+        },
+
+
+        {
+            "id": 2,
+
+            "prepareTime": 55,
+
+            "groups":
+            [
+                {
+                    "enemyType": 1,
+                    "count": 10,
+                    "spawnInterval": 0.45,
+                    "spawnPoint": 0
+                },{
+                    "enemyType": 1,
+                    "count": 5,
+                    "spawnInterval": 0.45,
+                    "spawnPoint": 1
+                }
+            ]
+        },
+
+
+        {
+            "id": 3,
+
+            "prepareTime": 65,
+
+            "groups":
+            [
+                {
+                    "enemyType": 1,
+                    "count": 10,
+                    "spawnInterval": 0.3,
+                    "spawnPoint": 0
+                },
+
+                {
+                    "enemyType": 2,
+                    "count": 1,
+                    "spawnInterval": 0.5,
+                    "spawnPoint": 1
+                }
+            ]
+        }
+    ]
+}

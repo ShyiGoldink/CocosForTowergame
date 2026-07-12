@@ -1,6 +1,7 @@
 const { ccclass, property } = cc._decorator;
 import DataTransformer from "./DataTrasformer";
 import StatusManager, { GameStatus } from "../Game/StatusManager";
+import SaveLoad from "./SaveLoad";
 @ccclass
 export default class Point extends cc.Component {
 
@@ -15,6 +16,7 @@ export default class Point extends cc.Component {
     private enemyData: cc.JsonAsset | null = null;
     @property(cc.JsonAsset)//初始资源
     private resourceData: cc.JsonAsset | null = null;
+    private canPlay: boolean = false;
 
 
     public get getPointId(): number//获取Id
@@ -24,7 +26,15 @@ export default class Point extends cc.Component {
 
     public OnClicked(): void //加载游戏场景的逻辑
     {
+        cc.log("点击", this.ID, this.canPlay);
 
+        if (!this.canPlay) {
+            cc.log("不能玩");
+            return;
+        }
+
+        cc.log("准备加载场景");
+        if (!this.canPlay) { return; }
         //必须先把关卡数据交给静态类
         if (this.initData)
             DataTransformer.LoadMapFromJson(this.initData);
@@ -33,6 +43,9 @@ export default class Point extends cc.Component {
         if (this.resourceData) DataTransformer.loadResourceFromJson(this.resourceData);
         //然后切换游戏状态
         StatusManager.setStatus(GameStatus.Prepare);
+        //还要给SaveLoad提供状态
+        SaveLoad.setCurrentPoint(this.ID);
+        SaveLoad.setOnGame();
         //然后才能切换场景
         cc.director.loadScene("GameScene");
 
@@ -48,6 +61,16 @@ export default class Point extends cc.Component {
 
     public get getChildPoints(): Point[] {
         return this.childPoints;
+    }
+    public setCanpalye() {
+        this.canPlay = true;
+    }
+    public get getCanplay() {
+        return this.canPlay;
+    }
+    public reset(): void {
+        this.isPassed = false;
+        this.canPlay = false;
     }
 
 }

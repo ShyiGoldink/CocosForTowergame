@@ -1,9 +1,9 @@
 const { ccclass, property } = cc._decorator;
 
-import BornBlock from "../Walls/BornBlock";
+import BornBlock from "../Map/Blocks/BornBlock";
 import EnemyPool from "./EnemyPool";
 import { LevelWaveData } from "./EnemyDataModule";
-import DataTransformer from "../Points/DataTrasformer";
+import DataTransformer from "../Tool/DataTrasformer";
 import EventBus from "../EventBus";
 import StatusManager, { GameStatus } from "../Game/StatusManager";
 

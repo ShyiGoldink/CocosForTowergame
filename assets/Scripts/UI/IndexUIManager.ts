@@ -1,4 +1,3 @@
-import Levels from "../Points/Levels";
 import SaveLoad from "../Points/SaveLoad";
 
 const { ccclass, property } = cc._decorator;

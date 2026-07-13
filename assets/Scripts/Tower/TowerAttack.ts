@@ -2,7 +2,7 @@ const { ccclass } = cc._decorator;
 
 import TowerData from "./TowerData";
 import Enemy from "../Enemy/Enemy";
-import Bullet from "./Bullet";
+import Bullet from "../Bullet/Bullet";
 
 @ccclass
 export default class TowerAttack extends cc.Component {
@@ -29,7 +29,7 @@ export default class TowerAttack extends cc.Component {
         this.circleCollider = this.getComponent(cc.CircleCollider);
 
         if (this.circleCollider) {
-            this.circleCollider.radius = this.data.range;
+            this.circleCollider.radius = this.data.Range;
             this.circleCollider.enabled = true;
         }
     }
@@ -38,7 +38,7 @@ export default class TowerAttack extends cc.Component {
 
         this.attackTimer += dt;
 
-        if (this.data && this.attackTimer < 1 / this.data.attackSpeed)
+        if (this.data && this.attackTimer < 1 / this.data.AttackSpeed)
             return;
 
         this.attackTimer = 0;
@@ -91,7 +91,7 @@ export default class TowerAttack extends cc.Component {
 
     private attack(enemy: Enemy) {
 
-        if (!this.data || !this.data.bulletPrefab) {
+        if (!this.data || !this.data.BulletPrefab) {
             return;
         }
 
@@ -111,7 +111,7 @@ export default class TowerAttack extends cc.Component {
                 if (this.bulletPool.size() > 0) {
                     bulletNode = this.bulletPool.get();
                 } else {
-                    bulletNode = cc.instantiate(this.data!.bulletPrefab!);
+                    bulletNode = cc.instantiate(this.data!.BulletPrefab!);
                 }
 
                 bulletNode.parent = this.node.parent;
@@ -128,7 +128,7 @@ export default class TowerAttack extends cc.Component {
                     this.bulletPool.put(node);
                 });
 
-                bullet.damage += this.data!.attck;
+                bullet.damage += this.data!.Attck;
 
             }, i * 0.05);
         }

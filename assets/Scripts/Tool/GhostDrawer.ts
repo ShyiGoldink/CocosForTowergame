@@ -3,25 +3,25 @@ import EventBus from "../EventBus";
 import { GameStatus } from "../Game/StatusManager";
 
 @ccclass
-export default class DrawTool extends cc.Component {
+export default class GhostDrawer extends cc.Component {
 
     @property(cc.Prefab)
     private drawPrefab: cc.Prefab = null!;
 
-    private static _instance: DrawTool | null = null!;
+    private static _instance: GhostDrawer | null = null!;
 
-    public static get Instance(): DrawTool {
+    public static get Instance(): GhostDrawer {
         return this._instance!;
     }
 
     private drawNodes: cc.Node[] = [];
 
     protected onLoad(): void {
-        if (DrawTool._instance && DrawTool._instance !== this) {
+        if (GhostDrawer._instance && GhostDrawer._instance !== this) {
             this.node.destroy();
             return;
         }
-        DrawTool._instance = this;
+        GhostDrawer._instance = this;
         // 提前创建4个节点
         for (let i = 0; i < 4; i++) {
 
@@ -88,8 +88,8 @@ export default class DrawTool extends cc.Component {
         }
     }
     protected onDestroy(): void {
-        if (DrawTool._instance === this) {
-            DrawTool._instance = null;
+        if (GhostDrawer._instance === this) {
+            GhostDrawer._instance = null;
         }
     }
 

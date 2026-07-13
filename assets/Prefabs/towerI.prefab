@@ -63,8 +63,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        893,
-        131.225,
+        278,
+        157,
         0,
         0,
         0,
@@ -121,20 +121,13 @@
     "_id": ""
   },
   {
-    "__type__": "cc.CircleCollider",
+    "__type__": "8f32cSHaIxA14DuYLJXGbrH",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
-    "tag": 0,
-    "_offset": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_radius": 51,
     "_id": ""
   },
   {
@@ -145,27 +138,17 @@
       "__id__": 1
     },
     "_enabled": true,
-    "attackSpeed": 2,
-    "range": 150,
-    "cost": 175,
-    "type": 0,
-    "bulletPrefab": {
+    "AttackSpeed": 3.5,
+    "Range": 128,
+    "Cost": 100,
+    "_type": 0,
+    "BulletPrefab": {
       "__uuid__": "324545ec-6bda-4a39-b3b6-bf7b439b8e82"
     },
     "_id": ""
   },
   {
     "__type__": "b4dbaa798tMiYUhJrI4AziR",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "_id": ""
-  },
-  {
-    "__type__": "8f32cSHaIxA14DuYLJXGbrH",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -182,6 +165,23 @@
       "__id__": 1
     },
     "_enabled": true,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CircleCollider",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "tag": 0,
+    "_offset": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_radius": 128,
     "_id": ""
   },
   {

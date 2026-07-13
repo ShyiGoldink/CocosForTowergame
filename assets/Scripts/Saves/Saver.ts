@@ -1,4 +1,4 @@
-export default class JsonManager {
+export default class Saver {
 
     private static readonly NORMAL_GAME_KEY =
         "normalGameData";

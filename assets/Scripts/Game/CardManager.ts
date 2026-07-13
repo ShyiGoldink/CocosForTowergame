@@ -1,8 +1,7 @@
 const { ccclass, property } = cc._decorator;
-import SlotLayout from "../Grids/SlotLayout";
-import Card from "../Grids/Card";
+import SlotLayout from "../Cards/SlotLayout";
+import Card from "../Cards/Card";
 import EventBus from "../EventBus";
-import DrawTool from "../Grids/DrawTool";
 import GoldManager from "../Game/GoldManager";
 
 @ccclass

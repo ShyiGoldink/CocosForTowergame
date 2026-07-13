@@ -1,5 +1,5 @@
 const { ccclass, property } = cc._decorator;
-import DataTransformer from "./DataTrasformer";
+import DataTransformer from "../Tool/DataTrasformer";
 import StatusManager, { GameStatus } from "../Game/StatusManager";
 import SaveLoad from "./SaveLoad";
 @ccclass

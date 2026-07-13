@@ -1,9 +1,9 @@
 const { ccclass } = cc._decorator;
 import BasicBlock from "./BasicBlock";
-import GridCell from "../Grids/GridCell";
-import TowerData from "../Tower/TowerData";
-import EventBus from "../EventBus";
-import StatusManager, { GameStatus } from "../Game/StatusManager";
+import GridCell from "../Grid/GridCell";
+import TowerData from "../../Tower/TowerData";
+import EventBus from "../../EventBus";
+import StatusManager, { GameStatus } from "../../Game/StatusManager";
 
 @ccclass
 export default class Wall extends BasicBlock//构造wall的预制体

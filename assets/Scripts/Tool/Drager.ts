@@ -43,6 +43,7 @@ export default class DragTool extends cc.Component {
     private onTouchStart(event: cc.Event.EventTouch): void {
         this.isPressing = true;
         this.isDragging = false;
+        this.pressTimer = 0;
     }
     protected update(dt: number): void {
         if (this.isPressing && !this.isDragging) {
@@ -54,12 +55,17 @@ export default class DragTool extends cc.Component {
     }
 
     private onTouchMove(event: cc.Event.EventTouch): void {
-        if (StatusManager.getStatus() == GameStatus.Battle) { return; }
-        if (!this.isPressing)
+        if (StatusManager.getStatus() == GameStatus.Battle) {
             return;
+        }
+        if (!this.isDragging) {
+            return;
+        }
         this.updateDrag(event);
     }
     private startDrag(): void {
+        if (this.isDragging)
+            return;
         this.isDragging = true;
         EventBus.Instance.emit("Draging", this.node);
     }

@@ -1,4 +1,4 @@
-import JsonManager from "./JsonManager";
+import Saver from "../Saves/Saver";
 
 const { ccclass, property } = cc._decorator;
 
@@ -47,14 +47,15 @@ export default class SaveLoad//一个储存的静态类，只用于储存数据�
     }
 
     public static initNormalGame() {
-        JsonManager.readNormalDaya();
-        this.passedPoints = JsonManager.getNormalData();
+        Saver.readNormalDaya();
+        this.passedPoints = Saver.getNormalData();
     }
 
     public static passIt() {
         this.setPassedPoint(this.currentPoint);
-        JsonManager.setSavedNormalData(this.passedPoints);
-        JsonManager.saveNoramlData();
+        this.isNewGame = false;
+        Saver.setSavedNormalData(this.passedPoints);
+        Saver.saveNoramlData();
     }
 
     public static setOnGame() {

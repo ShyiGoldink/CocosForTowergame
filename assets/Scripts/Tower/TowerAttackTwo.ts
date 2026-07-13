@@ -1,7 +1,7 @@
 const { ccclass } = cc._decorator;
 
 import TowerData from "./TowerData";
-import StraightBullet from "./straightBullet";
+import StraightBullet from "../Bullet/straightBullet";
 
 @ccclass
 export default class TowerAttackTwo extends cc.Component {
@@ -22,7 +22,7 @@ export default class TowerAttackTwo extends cc.Component {
             return;
         this.attackTimer += dt;
 
-        if (this.attackTimer < 1 / this.data.attackSpeed)
+        if (this.attackTimer < 1 / this.data.AttackSpeed)
             return;
 
         this.attackTimer = 0;
@@ -36,7 +36,7 @@ export default class TowerAttackTwo extends cc.Component {
      */
     private attack(): void {
 
-        if (!this.data || !this.data.bulletPrefab)
+        if (!this.data || !this.data.BulletPrefab)
             return;
 
         const stage = this.data.getStage;
@@ -53,7 +53,7 @@ export default class TowerAttackTwo extends cc.Component {
 
                 } else {
 
-                    bulletNode = cc.instantiate(this.data!.bulletPrefab!);
+                    bulletNode = cc.instantiate(this.data!.BulletPrefab!);
 
                 }
 
@@ -65,11 +65,11 @@ export default class TowerAttackTwo extends cc.Component {
                 if (bullet) {
 
                     bullet.init(
-                        this.data!.towerPosition.clone(),
+                        this.data!.TowerPosition.clone(),
                         this.recycleCallback!
                     );
 
-                    bullet.damage += this.data!.attck;
+                    bullet.damage += this.data!.Attck;
                 }
 
             }, i * 0.05);

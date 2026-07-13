@@ -1,8 +1,8 @@
 const { ccclass, property } = cc._decorator;
 import EventBus from "../EventBus";
-import DragTool from "./DragTool";
+import DragTool from "../Tool/Drager";
 import Tetromino from "./Tetromino";
-import GridManager from "./GridManager";
+import GridManager from "../Map/Grid/GridManager";
 import Slot from "./Slot";
 
 @ccclass
@@ -117,7 +117,7 @@ export default class Card extends cc.Component //card
     }
     public rotateRedraw() {
         if (this.tetromino && this.lastPosition) {
-            GridManager.Instance.potatoDraw(this.lastPosition, this.tetromino.GetCurrentType);
+            GridManager.Instance.refresh(this.lastPosition, this.tetromino.GetCurrentType);
         }
     }
 }

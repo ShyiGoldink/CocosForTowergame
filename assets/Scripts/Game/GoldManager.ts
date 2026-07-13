@@ -1,5 +1,5 @@
 const { ccclass, property } = cc._decorator;
-import DataTransformer from "../Points/DataTrasformer";
+import DataTransformer from "../Tool/DataTrasformer";
 import EventBus from "../EventBus";
 
 @ccclass

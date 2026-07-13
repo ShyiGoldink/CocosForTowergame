@@ -63,8 +63,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        1221.796,
-        236.957,
+        380,
+        153,
         0,
         0,
         0,
@@ -121,6 +121,53 @@
     "_id": ""
   },
   {
+    "__type__": "daaf7sLbq5DqKbuPTPpjcNI",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "AttackSpeed": 4,
+    "Range": 128,
+    "Cost": 100,
+    "_type": 0,
+    "BulletPrefab": {
+      "__uuid__": "aef10192-2db2-4442-bb79-e3f5cea3935a"
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "8f32cSHaIxA14DuYLJXGbrH",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "_id": ""
+  },
+  {
+    "__type__": "ad486BO+c5PNJnMGxv5NBn2",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "_id": ""
+  },
+  {
+    "__type__": "b4dbaa798tMiYUhJrI4AziR",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "_id": ""
+  },
+  {
     "__type__": "cc.CircleCollider",
     "_name": "",
     "_objFlags": 0,
@@ -135,53 +182,6 @@
       "y": 0
     },
     "_radius": 128,
-    "_id": ""
-  },
-  {
-    "__type__": "b4dbaa798tMiYUhJrI4AziR",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "_id": ""
-  },
-  {
-    "__type__": "daaf7sLbq5DqKbuPTPpjcNI",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "attackSpeed": 3,
-    "range": 150,
-    "cost": 100,
-    "type": 0,
-    "bulletPrefab": {
-      "__uuid__": "aef10192-2db2-4442-bb79-e3f5cea3935a"
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "ad486BO+c5PNJnMGxv5NBn2",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "_id": ""
-  },
-  {
-    "__type__": "8f32cSHaIxA14DuYLJXGbrH",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
     "_id": ""
   },
   {

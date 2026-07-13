@@ -33,17 +33,20 @@
       },
       {
         "__id__": 6
+      },
+      {
+        "__id__": 7
       }
     ],
     "_prefab": {
-      "__id__": 7
+      "__id__": 8
     },
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
     "_contentSize": {
@@ -60,8 +63,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        270,
-        37.054,
+        268,
+        131,
         0,
         0,
         0,
@@ -125,10 +128,11 @@
       "__id__": 1
     },
     "_enabled": true,
-    "attackSpeed": 0.5,
-    "range": 128,
-    "cost": 125,
-    "bulletPrefab": {
+    "AttackSpeed": 0.75,
+    "Range": 128,
+    "Cost": 100,
+    "_type": 0,
+    "BulletPrefab": {
       "__uuid__": "c79f5d5f-f0ab-4b7d-a825-1a7ba5e79f77"
     },
     "_id": ""
@@ -161,6 +165,23 @@
       "__id__": 1
     },
     "_enabled": true,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CircleCollider",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "tag": 0,
+    "_offset": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_radius": 128,
     "_id": ""
   },
   {

@@ -4,6 +4,13 @@ export default class ConfigExtern {
     public static readonly GRID_SIZE = 64;
     public static readonly WALL_SIZE = 96;
     public static readonly SAVE_KEY = "LevelSave";
+    public static readonly TYPE_WALL = 1;
+    public static readonly TYPE_ENDBLOCK = 2;
+    public static readonly TYPE_BORNBLOCK = 3;
+    public static CostTowerO = 100;
+    public static CostTowerI = 175;
+    public static CostTowerF = 125;
+    public static SellTowerCost = 50;
 }
 /*
     伪代码的怪物波数数据结构

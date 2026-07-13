@@ -1,7 +1,9 @@
 const { ccclass } = cc._decorator;
 
-import GridCell from "./GridCell";
-import GridManager from "./GridManager";
+import GridCell from "../Map/Grid/GridCell";
+import GridManager from "../Map/Grid/GridManager";
+import GridLeader from "./GridLeader";
+import GridData from "../Map/Grid/GridData";
 
 @ccclass
 export default class PathFinder {
@@ -11,6 +13,7 @@ export default class PathFinder {
     // 最终路径
     private static path: GridCell[] = [];
     public static isFinding: boolean = false;
+    private static _gridLeader: GridLeader = new GridLeader();
     /**
      * 返回Cell路径
      */
@@ -20,11 +23,10 @@ export default class PathFinder {
         this.openList.length = 0;
         this.path.length = 0;
 
-        const manager = GridManager.Instance;
-        const end = manager.getendCell;
+        const end = GridManager.Instance.getEndCell();
 
         // 重置所有节点
-        for (const row of manager.getMap) {
+        for (const row of GridManager.Instance.getMap) {
             for (const cell of row) {
                 cell.resetPathData();
             }
@@ -64,7 +66,7 @@ export default class PathFinder {
 
         for (const cell of cellPath) {
             result.push(
-                GridManager.Instance.GridToWorld(cell)
+                this._gridLeader.gridToWorld(cell)
             );
         }
         this.isFinding = false;

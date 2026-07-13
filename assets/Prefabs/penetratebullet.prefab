@@ -112,24 +112,6 @@
     "_id": ""
   },
   {
-    "__type__": "72bb4Wcg3BOGajOKLoHj281",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "currentDamage": 15,
-    "speed": 100,
-    "lifeTime": 10,
-    "direction": {
-      "__type__": "cc.Vec2",
-      "x": 1,
-      "y": 0
-    },
-    "_id": ""
-  },
-  {
     "__type__": "cc.BoxCollider",
     "_name": "",
     "_objFlags": 0,
@@ -147,6 +129,24 @@
       "__type__": "cc.Size",
       "width": 52,
       "height": 52
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "7d1d7uEIX1EVLBC8fiqzgq1",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "currentDamage": 25,
+    "speed": 100,
+    "lifeTime": 5,
+    "direction": {
+      "__type__": "cc.Vec2",
+      "x": 1,
+      "y": 0
     },
     "_id": ""
   },

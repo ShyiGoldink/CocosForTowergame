@@ -1,24 +1,27 @@
-import GridCell from "../Grids/GridCell";
-import GridManager from "../Grids/GridManager";
-import PathFinder from "../Grids/PathFinder";
-import EnemyManager from "../Enemy/EnemyManager";
+import GridCell from "../Grid/GridCell";
+import GridManager from "../Grid/GridManager";
+import PathFinder from "../../Tool/PathFinder";
+import EnemyManager from "../../Enemy/EnemyManager";
+import BasicBlock from "./BasicBlock";
+import GridLeader from "../../Tool/GridLeader";
 
 const { ccclass } = cc._decorator;
 
 @ccclass
-export default class BornBlock extends cc.Component {
-    private ID: number = 0;//ID,用于检测出生点
-    private shortestPath: GridCell[] = [];
-    private color: cc.Color = cc.Color.BLUE;
-    private graphics: cc.Graphics | null = null;
+export default class BornBlock extends BasicBlock {
+    private _ID: number = 0;//ID,用于检测出生点
+    private _shortestPath: GridCell[] = [];
+    private _color: cc.Color = cc.Color.BLUE;
+    private _graphics: cc.Graphics | null = null;
     private _cell: GridCell | null = null;
+    private _gridLeader: GridLeader = new GridLeader();
     public static canGoending: boolean = true;
 
     protected onLoad(): void {
-        this.graphics = this.getComponent(cc.Graphics);
+        this._graphics = this.getComponent(cc.Graphics);
     }
     protected start(): void {
-        EnemyManager.Instance.registerBornBlock(this.ID, this);
+        EnemyManager.Instance.registerBornBlock(this._ID, this);
         this.canGoend();
     }
 
@@ -30,15 +33,15 @@ export default class BornBlock extends cc.Component {
         const path =
             PathFinder.FindPath(this._cell);
         if (path.length > 0) {
-            this.shortestPath = path.slice();
-            this.color = cc.Color.BLUE;
+            this._shortestPath = path.slice();
+            this._color = cc.Color.BLUE;
             BornBlock.canGoending =
                 BornBlock.canGoending && true;
         }
         else {
             // 找不到路
             // 保留旧路线
-            this.color = cc.Color.RED;
+            this._color = cc.Color.RED;
             BornBlock.canGoending = false;
         }
         this.DrawLines();
@@ -47,7 +50,7 @@ export default class BornBlock extends cc.Component {
     private CellToLocal(cell: GridCell): cc.Vec2 {
         // GridManager内部坐标
         const gridPos =
-            GridManager.Instance.GridToWorld(cell);
+            this._gridLeader.gridToWorld(cell);
         // 转世界坐标
         const worldPos =
             GridManager.Instance.node
@@ -58,44 +61,44 @@ export default class BornBlock extends cc.Component {
         return localPos;
     }
     private DrawLines(): void {
-        if (!this.graphics) {
+        if (!this._graphics) {
             return;
         }
-        this.graphics.clear();
-        if (this.shortestPath.length < 2) {
+        this._graphics.clear();
+        if (this._shortestPath.length < 2) {
             return;
         }
-        this.graphics.lineWidth = 8;
-        this.graphics.strokeColor = this.color;
-        this.graphics.lineCap =
+        this._graphics.lineWidth = 8;
+        this._graphics.strokeColor = this._color;
+        this._graphics.lineCap =
             cc.Graphics.LineCap.ROUND;
-        this.graphics.lineJoin =
+        this._graphics.lineJoin =
             cc.Graphics.LineJoin.ROUND;
         // 第一个点
         let pos =
             this.CellToLocal(
-                this.shortestPath[0]
+                this._shortestPath[0]
             );
-        this.graphics.moveTo(
+        this._graphics.moveTo(
             pos.x,
             pos.y
         );
         // 后续点
         for (
             let i = 1;
-            i < this.shortestPath.length;
+            i < this._shortestPath.length;
             i++
         ) {
             pos =
                 this.CellToLocal(
-                    this.shortestPath[i]
+                    this._shortestPath[i]
                 );
-            this.graphics.lineTo(
+            this._graphics.lineTo(
                 pos.x,
                 pos.y
             );
         }
-        this.graphics.stroke();
+        this._graphics.stroke();
     }
     public setCell(cell: GridCell): void {
 
@@ -104,19 +107,19 @@ export default class BornBlock extends cc.Component {
     // 给Enemy使用
     public getPath(): GridCell[] {
 
-        return this.shortestPath;
+        return this._shortestPath;
     }
 
     public setId(id: number): void//设置ID，用于注册
     {
-        this.ID = id;
+        this._ID = id;
     }
     public getPathVec3(parent: cc.Node): cc.Vec3[] {
         let result: cc.Vec3[] = [];
-        for (let cell of this.shortestPath) {
+        for (let cell of this._shortestPath) {
             // Grid局部坐标
             let gridPos =
-                GridManager.Instance.GridToWorld(cell);
+                this._gridLeader.gridToWorld(cell);
 
             // Grid局部
             // -> 世界

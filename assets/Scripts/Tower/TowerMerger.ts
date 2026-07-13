@@ -1,8 +1,8 @@
 import EventBus from "../EventBus";
-import DragTool from "../Grids/DragTool";
-import GridCell from "../Grids/GridCell";
-import GridManager from "../Grids/GridManager";
-import Wall from "../Walls/Wall";
+import DragTool from "../Tool/Drager";
+import GridCell from "../Map/Grid/GridCell";
+import GridManager from "../Map/Grid/GridManager";
+import Wall from "../Map/Blocks/Wall";
 import TowerData from "./TowerData";
 
 const { ccclass, property } = cc._decorator;

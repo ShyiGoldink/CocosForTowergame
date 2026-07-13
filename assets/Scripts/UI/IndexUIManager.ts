@@ -1,4 +1,5 @@
 import SaveLoad from "../Points/SaveLoad";
+import StatusManager from "../Game/StatusManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -29,8 +30,13 @@ export default class IndexUIManager extends cc.Component//管理目录菜单
             this.pageIndex.active = false;
         if (this.pageLevels)
             this.pageLevels.active = true;
+        StatusManager.setGameMode(false);
         SaveLoad.init();
         SaveLoad.setNewGame();
+    }
+
+    public onEndlessGameStart() {
+        StatusManager.setGameMode(true);
     }
 
     public toLevels(): void {

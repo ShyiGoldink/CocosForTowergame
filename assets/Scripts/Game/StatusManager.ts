@@ -15,11 +15,19 @@ export enum GameStatus {
 export default class StatusManager {
 
     private static _currentStatus: GameStatus = GameStatus.Index;
+    private static _isEndlessMode: boolean = false;
     public static getStatus(): GameStatus {
         return StatusManager._currentStatus;
     }
     public static setStatus(status: GameStatus): void {
         StatusManager._currentStatus = status;
         EventBus.Instance.emit("statusChanged", this._currentStatus);
+    }
+    //设置游戏模式，用于区分当前游戏状态
+    public static setGameMode(mode: boolean): void {
+        this._isEndlessMode = mode;
+    }
+    public static get getGameMode(): boolean {
+        return this._isEndlessMode;
     }
 }
